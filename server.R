@@ -10,24 +10,27 @@ shinyServer(function(input, output) {
           else "This was the last new image. Next button press will bring back the first image."
                
      })
+
      
      # Based on source: 
      # http://stackoverflow.com/questions/9543343/plot-a-jpg-image-using-base-graphics-in-r
-     plot_jpeg = function(path, textTop=NA, textBottom=NA, col="black", add=FALSE)
-     {
+     plot_jpeg = function(path, textTop=NA, textBottom=NA, col="black", add=FALSE){
           require('jpeg')
           tryCatch({
-               jpg = readJPEG(path, native=T) # read the file
-               res = dim(jpg)[1:2] # get the resolution
-               if (!add) { # initialize an empty plot area if add==FALSE
-                    plot(1,1,xlim=c(1,res[2]),ylim=c(1,res[1]),asp=1,type='n',xaxs='i',yaxs='i',xaxt='n',yaxt='n',xlab='',ylab='',bty='n')
+               jpg = readJPEG(path, native=T) ; res = dim(jpg)[1:2]
+               op <- par(mar = rep(0, 4))
+               if (!add) {
+                    plot(1,1,xlim=c(1,res[2]),ylim=c(1,res[1]),asp=1,type='n',xaxs='i',yaxs='i',
+                         xaxt='n',yaxt='n',xlab='',ylab='',bty='n')
                }
                rasterImage(jpg,1,1,res[2],res[1])
                text(res[2]/2,14*res[1]/15,textTop,cex=2,col=col)
                text(res[2]/2,res[1]/15,textBottom,cex=2,col=col)
-          },error=function(e) {
-               plot(1,1,xlim=c(1,20),ylim=c(1,20),asp=1,type='n',xaxs='i',yaxs='i',xaxt='n',yaxt='n',xlab='',ylab='',bty='n')
-               text(10,19,"Wrong input type: please upload a .jpg file or choose cats or dogs.",cex=1.5)
+               par(op)
+          }, error=function(e) {
+               plot(1,1,xlim=c(1,50),ylim=c(1,20),asp=1,type='n',xaxs='i',
+                    yaxs='i',xaxt='n',yaxt='n',xlab='',ylab='',bty='n')
+               text(25,19,"Wrong input type: please upload a .jpg\nfile or choose cats or dogs.",cex=1.5)
           })
      }
 

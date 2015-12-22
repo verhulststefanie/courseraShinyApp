@@ -24,7 +24,11 @@ shinyUI(pageWithSidebar(
                         "Violet" = "violet"))
      ),
      mainPanel(
-          imageOutput("image"),
-          textOutput("source")
+          tabsetPanel(
+               tabPanel("Meme Generator", 
+                        imageOutput("image", height = "500px"),
+                        textOutput("source")),
+               tabPanel("Documentation", includeMarkdown("doc.md"))
+          )
      )
 ))
